@@ -85,7 +85,7 @@
 			<tr ng-repeat="(key, value) in board">
 				<td ng-repeat="row in board[key]">
 					<!--a ng-hide="row.show" ng-click="toggleCard(row)"-->
-						<img src="playing-card-back.jpg" ng-click="toggleCard(row)" ng-hide="row.show"/>
+						<img src="playing-card-back.jpg" ng-click="currentPlayer == p1 ? toggleCard(row): '' " ng-hide="row.show"/>
 					<!--/a--> 
 					<!--a ng-show="row.show"-->
 						<div class="imageWrapper">

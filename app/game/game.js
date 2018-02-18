@@ -32,6 +32,7 @@ function gameController($scope, $timeout){
 
   $scope.toggleCard = function(card){	
 	  if(timerStarted){
+		console.log("here?")
 		return;
 	  }
 	  
@@ -54,9 +55,11 @@ function gameController($scope, $timeout){
 			$scope.message = $scope.isGameOver ? "GAME OVER" : "You found a match!";
 			timerStarted = true;
 			timeout = $timeout(function(){ setMatched(card1, card2); }, 1000)
+			
+			
 		} else {
 			timerStarted = true;
-		   $scope.message = "Not today! try again!";
+		    $scope.message = "Not today! try again!";
 			timeout = $timeout(function(){ resetCards(card1, card2)}, 1000);
 			storeInComputerMemory(card1, card2);
 		}
@@ -73,21 +76,28 @@ function gameController($scope, $timeout){
 
       $scope.currentPlayer.matches.push([card1, card2]);
       $scope.selectedCards = [];
-	  if(!$scope.isGameOver){resetTurn();}
+	  
+	  //don't reset the turn if they got the match right
+	  if(!$scope.isGameOver){
+		resetTurn(true);
+	   }
+	   
+	   //if the computer got the match, do it again!
+	if($scope.currentPlayer.name == 'Computer'){
+		$timeout(function(){ computerTurn(), 1001});;
+	}
   }
 
   var resetCards = function(card1, card2){
     card1.show = false;
     card2.show = false;
     $scope.selectedCards = [];
-    resetTurn();
-
+    resetTurn(false);
   }
   
-  var resetTurn = function(){
-  
+  var resetTurn = function(isMatch){
 	timerStarted = false;
-	$scope.currentPlayer = $scope.currentPlayer == $scope.p1 ? $scope.p2 : $scope.p1;
+	$scope.currentPlayer = isMatch ? $scope.currentPlayer : ($scope.currentPlayer == $scope.p1 ? $scope.p2 : $scope.p1);
 	$scope.message = "";
   }
 
@@ -114,18 +124,16 @@ function gameController($scope, $timeout){
   }
 
   	$scope.$watch('currentPlayer', function(val){
-		if(val.name == 'Computer'){
+		if($scope.currentPlayer.name == 'Computer' ){
 			computerTurn();
-			//$timeout(function(){ computerTurn(); }, 1000);
 		}
-	})
+	});
+	
 	
   function computerTurn(){
 	var card1; var card2;
 	var values = {};
 	var filteredComputerMem = computerMemory.filter( mem => !mem.matched);
-	console.log("filtered comp mem");
-	console.dir(filteredComputerMem);
 	
 	for(var i=0; i<filteredComputerMem.length; i++){
 		var mem = filteredComputerMem[i];
@@ -138,15 +146,7 @@ function gameController($scope, $timeout){
 		}
 	}
 	
-	console.log("values!");
-	console.dir(values);
-	console.log("card1: ")
-	console.dir(card1);
-		console.log("card2: "+card2);
-	console.dir(card2)
-	
 	var move1 = card1 ? card1 : randomMove();
-
 	$scope.toggleCard(move1);
 	
 	if(!card2){
@@ -154,11 +154,10 @@ function gameController($scope, $timeout){
 		card2 = tmp2.length > 0 ? tmp2[0] : randomMove();
 	}
 
-	$timeout(function(){ $scope.toggleCard(card2) }, 1000);
+	$timeout(function(){  $scope.toggleCard(card2) }, 1000);
 }
 	
-var randomMove = function(){
-	console.log("random");
+	var randomMove = function(){
 	//select 2 cards at random. maybe add something smart later
 	var randId = getRandomId();
 	while(cards[randId].matched || cards[randId].show){
@@ -166,11 +165,8 @@ var randomMove = function(){
 	}
 	
 	 return cards[randId];
-	 //$scope.toggleCard(card); 
   }
   
-  function filterComputerMemory(){
-  }
   
   
   
