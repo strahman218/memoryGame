@@ -2,13 +2,16 @@
 
 angular.module('myApp.view2', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view2', {
-    templateUrl: 'view2/view2.html',
-    controller: 'View2Ctrl'
-  });
-}])
-
-.controller('View2Ctrl', [function() {
-
-}]);
+function homePageController($scope, $window, boardGameService){ 
+	$scope.game = {};
+	$scope.goToGame = function(){
+		var name = $scope.game.name ? $scope.game.name : 'You';
+		
+		boardGameService.addPlayer(name);
+		if($scope.game.type == 'Multi'){
+			boardGameService.addPlayer('Computer');
+		}
+		
+		$window.location = '#!/game';
+	}
+};

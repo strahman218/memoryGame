@@ -1,5 +1,38 @@
-<p>This is the partial for view 2.</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
+	 <style>
+		body {	
+			background-color: lightblue;
+		}
+    
+	</style>
+	
+</head>
+<body>
+	<h1> Welcome to my game! </h1>
+	
+	<div>
+		<div>
+			<span>Name: </span>
+			<input type='text' ng-model="game.name"/>
+		</div>
+		
+		<div>
+			<span>Single Player or Multiplayer?</span>
+			<div>
+				<input type="radio" value="Single" ng-model="game.type">Single Player</input>
+				<input type="radio" value="Multi" ng-model="game.type">Multiplayer</input>
+			</div>
+		</div>
+		
+		<button ng-click="goToGame()">Let's Go! {{game}}</button>
+	</div>
+</body>
+</html>

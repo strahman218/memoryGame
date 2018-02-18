@@ -14,10 +14,8 @@
       border-radius: 0;
     }
     
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
     .row.content {height: 450px}
     
-    /* Set gray background color and 100% height */
     .sidenav {
       padding-top: 20px;
       background-color: #f1f1f1;
@@ -56,7 +54,7 @@
 <body>
 <nav class="navbar">
 	<div class="container-fluid text-center">
-		{{currentPlayer.name}}'s Turn
+		{{currentPlayer.name}}{{currentPlayer.name == 'You' ? "r" : "'s"}} Turn
 		<strong ng-show="message">{{message}}</strong>
 		<h1 ng-show="isGameOver">
 			<span ng-show="p1.matches.length == p2.matches.length"> TIE </span>
@@ -72,7 +70,7 @@
 	<div class="row content">
 		<div class="col-xs-2 sidenav">
 			<div class="well">
-				{{p2.name}} Matches ({{p2.matches.length}})
+				{{p2.name}}'s Matches ({{p2.matches.length}})
 			</div>
 			
 			<div ng-repeat="match in p2.matches">
@@ -105,7 +103,7 @@
 		
 		<div class="col-sm-2 sidenav">
 			<div class="well">
-				{{p1.name}}r Matches ({{p1.matches.length}})
+				{{p1.name}}{{p1.name == 'You' ? "r" : "'s"}} Matches ({{p1.matches.length}})
 			</div>
 			
 			<div ng-repeat="match in p1.matches">

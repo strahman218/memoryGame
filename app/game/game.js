@@ -2,37 +2,32 @@
 
 angular.module('myApp.game', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/game', {
-    templateUrl: 'game/game.html',
-    controller: gameController
-  });
-}]);
-
-function gameController($scope, $timeout){
-	var cardSuits = ['heart', 'spade', 'club', 'diamond'];
-	var colMax = 13;
-	var rowMax = 4;
-	var numCards = colMax * rowMax;
+function gameController($scope, $timeout, boardGameService){
+	var game = boardGameService.getGame;
+	var cards = game.cards;
+	var players = game.players;
+	var numCards = boardGameService.numCards;
+	
+	$scope.board = game.board;
+	
+	console.log("payers");
+	console.dir(numCards)
+	
 	$scope.isGameOver = false;
 	$scope.selectedCards = [];
 
-	var cards = {};
 	var computerMemory = [];
-	$scope.board = [];
 	$scope.message = '';
 	var totalMatches = 0;
-	
-	initializeGame();
-	$scope.currentPlayer = $scope.p1;
-
 	var timeout;
 	var timerStarted = false;
 	
+	$scope.currentPlayer = players[0];
+	$scope.p1 = players[0];
+	$scope.p2 = players[1];
 
   $scope.toggleCard = function(card){	
 	  if(timerStarted){
-		console.log("here?")
 		return;
 	  }
 	  
@@ -160,6 +155,8 @@ function gameController($scope, $timeout){
 	var randomMove = function(){
 	//select 2 cards at random. maybe add something smart later
 	var randId = getRandomId();
+	console.log("randId: "+randId);
+	console.dir(cards[randId]);
 	while(cards[randId].matched || cards[randId].show){
 		randId = getRandomId();
 	}
@@ -168,105 +165,7 @@ function gameController($scope, $timeout){
   }
   
   
-  
-  
-  
-  
-  
-  
-  
   //all the functions to initialize the game
-
-  function initializeGame(){
-  console.log("initializeGame()");
-    populateCardValues();
-    createBoard();
-	addPlayers();
-	
-  }  
- 
-  function addPlayers(){
-	  $scope.p1 = new Player('You');
-	  $scope.p2 = new Player('Computer');
-  }
-  
-  function populateCardValues(){
-  console.log("populateCardValues()");
-    for(var suit=0; suit<cardSuits.length; suit++){
-      for(var value=1; value<14; value++) {
-        var cardValue = [1, 11, 12, 13].indexOf(value) != -1 ? getCardValue(value) : value;
-        var cardId = getRandomValue();		
-        var tmp = new Card(cardId, cardValue, value, cardSuits[suit]);
-        cards[cardId] = tmp;
-      }
-    }
-  }
-
-  function getCardValue(value){
-    var display;
-
-      switch(value){
-        case 1:
-              display = 'A';
-              break;
-        case 11:
-              display = 'J';
-              break;
-        case 12:
-              display = 'Q';
-              break;
-        case 13:
-              display = 'K';
-              break;
-      }
-
-    return display;
-  }
-
-  function createBoard(){
-  var row;
-	console.log("create board");
-    //sets up the board
-    for(row=0; row<rowMax; row++){
-      if($scope.board[row] == null){
-        $scope.board[row] = [];
-      }
-    }
-	
-    populateBoard();
-  }
-
-  function populateBoard(){
-  console.log("populateBoard()");
-    var bRow = 0;
-
-    for(var card=0; card<52; card++){
-      if($scope.board[bRow].length < colMax){
-        $scope.board[bRow].push(cards[card]);
-      } else {
-        bRow++;
-        $scope.board[bRow].push(cards[card]);
-      }
-    }
-	
-	console.log("board is done");
-	console.dir($scope.board);
-  }
-
-  function Card(id, display, value, suit){
-    this.id = id;
-    this.display = display;
-    this.value = value;
-    this.suit = suit;
-    this.show = false;
-    this.matched = false;
-  }
-  
-  function Player(name){
-	this.name = name;
-	this.turn = 0;
-	this.matches = [];
-  }
 
   function getRandomValue(){
     var rand = getRandomId();
