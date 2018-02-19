@@ -51,31 +51,39 @@
   </style>
 </head>
 <body>
+
+
+<div class="navbar">
+	<button ng-click="goHome()">New Game</button>
+</div>
+
+<div class="navbar" ng-show="!isGameOver && gameType == 'Multi' ">
+	<div class="container-fluid text-center">
+			{{currentPlayer.name}}{{currentPlayer.name == 'You' ? "r" : "'s"}} Turn
+	</div>
+</div>
+
 <nav class="navbar">
 	<div class="container-fluid text-center">
-		<span ng-show="!isGameOver && gameType == 'Multi' ">
-			{{currentPlayer.name}}{{currentPlayer.name == 'You' ? "r" : "'s"}} Turn
-		</span>
-		
 		<h1 ng-show="isGameOver && message">{{message}}</h1>
 		<strong ng-show="!isGameOver">{{message}}</strong>
 	</div>
-	
-	<button ng-click="goHome()">New Game</button>
 </nav>
 
 <div class="container-fluid text-center">
 	<div class="row content">
-		<div class="col-xs-2 sidenav" ng-show="gameType == 'Multi' ">
-			<div class="well">
-				{{p2.name}}'s Matches ({{p2.matches.length}})
-			</div>
-			
-			<div ng-repeat="match in p2.matches">
-				{{match[0].display}}
-				<span ng-bind-html="match[0].icon | unsafe"></span> /
-				{{match[1].display}} 
-				<span ng-bind-html="match[1].icon | unsafe"></span> 
+		<div class="col-xs-2 sidenav">
+			<div ng-show="gameType == 'Multi' ">
+				<div class="well">
+					{{p2.name}}'s Matches ({{p2.matches.length}})
+				</div>
+				
+				<div ng-repeat="match in p2.matches">
+					{{match[0].display}}
+					<span ng-bind-html="match[0].icon | unsafe"></span> /
+					{{match[1].display}} 
+					<span ng-bind-html="match[1].icon | unsafe"></span> 
+				</div>
 			</div>
 		</div>
 		
