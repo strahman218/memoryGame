@@ -1,39 +1,37 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-var module = angular.module('myApp', [
+angular.module('myApp', [
   'ngRoute',
   'myApp.game',
-  'myApp.view2',
+  'myApp.home',
   'myApp.version'
-]);
-
-module.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+])
+.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
   $routeProvider
-  .when('/game', {
+    .when('/game/single', {
+	templateUrl: 'game/game.html',
+	controller: gameController
+  })
+  .when('/game/multi', {
     templateUrl: 'game/game.html',
     controller: gameController
   })
-  .when('/view2', {
-    templateUrl: 'view2/view2.html',
+  .when('/', {
+    templateUrl: 'home/home.html',
     controller: homePageController
   })
-  .otherwise({redirectTo: '/view2'});
-}]);
-
-module.service('boardGameService', function(){
+  .otherwise({redirectTo: '/home'});
+}])
+.service('boardGameService', function(){
 	var cardSuits = ['heart', 'spade', 'club', 'diamond'];
 	var colMax = 13;
 	var rowMax = 4;
 	var numCards = colMax * rowMax;
 	var cards = {};
-
-	var game = {};
-	game.board = [];
-	game.players = [];
-	game.cards = cards;
+	var game = new Game();
 	initializeGame();
 	
 	//players is the just a list of names
@@ -41,13 +39,15 @@ module.service('boardGameService', function(){
 		var p = new Player(player);
 		game.players.push(p);
 	}
-
+	
+	var setGameType = function(type){
+		game.type = type;
+	}
 	
 	//all private methods
 	function initializeGame(){
 		populateCardValues();
 		createBoard();
-		//addPlayers();
 	 }  
 	  
 	function populateCardValues(){
@@ -111,6 +111,7 @@ module.service('boardGameService', function(){
     this.display = display;
     this.value = value;
     this.suit = suit;
+	this.icon = suit == 'diamond' ? " &diams;" : " &"+suit+"s;"
     this.show = false;
     this.matched = false;
   }
@@ -130,9 +131,33 @@ module.service('boardGameService', function(){
 	this.turn = 0;
 	this.matches = [];
   }
+  
+  function Game(){
+  	this.type = ''; 
+	this.board = [],
+	this.players = [],
+	this.cards = cards
+  }
+  
   return {
-		addPlayer: addPlayer,
-		getGame: game,
-		numCards: numCards
+	addPlayer: addPlayer,
+	getGame: game,
+	numCards: numCards,
+	setType: setGameType
 	}
-  });
+  })
+  /*.directive('singlePlayerGame', function(){
+	
+	return {
+		restrict: 'E',
+		templateUrl: '/singlePlayerGame.html',
+		controller: gameController
+	}
+  })
+  .directive('multiPlayerGame', function(){
+	return {
+		restrict: 'E',
+		templateUrl: '/multiPlayerGame.html',
+		controller: gameController
+	}
+  })*/

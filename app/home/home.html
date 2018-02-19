@@ -12,27 +12,30 @@
 			background-color: lightblue;
 		}
     
+	    
+	.content {
+		max-width: 500px;
+		margin: auto;
+	}
 	</style>
 	
 </head>
 <body>
-	<h1> Welcome to my game! </h1>
-	
-	<div>
-		<div>
+	<div class="content">
+		<h1 class="text text-center"> Welcome to my game! </h1>
 			<span>Name: </span>
 			<input type='text' ng-model="game.name"/>
-		</div>
-		
-		<div>
-			<span>Single Player or Multiplayer?</span>
+			
 			<div>
-				<input type="radio" value="Single" ng-model="game.type">Single Player</input>
-				<input type="radio" value="Multi" ng-model="game.type">Multiplayer</input>
+				<span>
+					Game Type: <input type="radio" value="Single" ng-model="game.type">Single Player</input> 					<input type="radio" value="Multi" ng-model="game.type">Multiplayer</input>
+				</span>
 			</div>
+			
+			<div ng-show="message">
+				<strong>{{message}}</strong>
+			</div>
+			<button ng-click="goToGame()">Let's Go!</button>
 		</div>
-		
-		<button ng-click="goToGame()">Let's Go! {{game}}</button>
-	</div>
 </body>
 </html>
