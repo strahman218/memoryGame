@@ -2,5 +2,7 @@
 
 To run:  
   npm install  
-  node server.js
+  node ./app/server.js  
+  navigate to http://localhost:8080
+  
   
