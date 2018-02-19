@@ -1,3 +1,6 @@
 # memoryGame
 
-run node server.js 
+To run:
+  npm install
+  node server.js
+  
